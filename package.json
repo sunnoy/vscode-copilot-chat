@@ -23,7 +23,7 @@
 	"icon": "assets/copilot.png",
 	"pricing": "Trial",
 	"engines": {
-		"vscode": "^1.107.0-20251119",
+		"vscode": "^1.96.0",
 		"npm": ">=9.0.0",
 		"node": ">=22.14.0"
 	},
@@ -1938,6 +1938,11 @@
 			}
 		],
 		"commands": [
+			{
+				"command": "github.copilot.chat.toggleAutoApproveShell",
+				"title": "Copilot: Toggle Auto-Approve Shell Commands",
+				"category": "GitHub Copilot"
+			},
 			{
 				"command": "github.copilot.chat.triggerPermissiveSignIn",
 				"title": "%github.copilot.command.triggerPermissiveSignIn%"
