@@ -562,6 +562,15 @@ export class ClaudeCodeSession extends Disposable {
 	}
 
 	private async canAutoApprove(toolName: string, input: Record<string, unknown>): Promise<boolean> {
+		// Check if auto-approve shell commands is enabled for Bash tool
+		if (toolName === ClaudeToolNames.Bash) {
+			const autoApproveShell = this.configService.getConfig(ConfigKey.Advanced.AutoApproveShellCommands);
+			if (autoApproveShell) {
+				this.logService.trace(`ClaudeCodeSession: auto-approving bash command: ${input.command}`);
+				return true;
+			}
+		}
+
 		if (toolName === ClaudeToolNames.Edit || toolName === ClaudeToolNames.Write || toolName === ClaudeToolNames.MultiEdit) {
 			return await this.instantiationService.invokeFunction(isFileOkForTool, URI.file(input.file_path as string));
 		}

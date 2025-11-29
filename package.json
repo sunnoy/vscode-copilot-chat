@@ -3509,6 +3509,14 @@
 							"onExp"
 						]
 					},
+					"github.copilot.chat.agent.autoApproveShellCommands": {
+						"type": "boolean",
+						"default": false,
+						"markdownDescription": "When enabled, terminal commands in Agent mode will be executed automatically without requiring user confirmation. ⚠️ Use with caution as this allows Copilot to run commands without your explicit approval.",
+						"tags": [
+							"experimental"
+						]
+					},
 					"github.copilot.chat.completionsFetcher": {
 						"type": [
 							"string",

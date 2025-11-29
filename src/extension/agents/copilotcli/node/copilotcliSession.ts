@@ -5,6 +5,7 @@
 
 import type { Attachment, Session } from '@github/copilot/sdk';
 import type * as vscode from 'vscode';
+import { ConfigKey, IConfigurationService } from '../../../../platform/configuration/common/configurationService';
 import { IGitService } from '../../../../platform/git/common/gitService';
 import { ILogService } from '../../../../platform/log/common/logService';
 import { IWorkspaceService } from '../../../../platform/workspace/common/workspaceService';
@@ -281,6 +282,19 @@ export class CopilotCLISession extends DisposableStore implements ICopilotCLISes
 		workingDirectory: string | undefined,
 		token: vscode.CancellationToken
 	): Promise<{ kind: 'approved' } | { kind: 'denied-interactively-by-user' }> {
+		// Check if auto-approve shell commands is enabled
+		if (permissionRequest.kind === 'shell') {
+			const autoApproveShell = this.instantiationService.invokeFunction(accessor => {
+				const configService = accessor.get(IConfigurationService);
+				return configService.getConfig(ConfigKey.Advanced.AutoApproveShellCommands);
+			});
+
+			if (autoApproveShell) {
+				this.logService.trace(`[CopilotCLISession] Auto-approving shell command: ${permissionRequest.fullCommandText}`);
+				return { kind: 'approved' };
+			}
+		}
+
 		if (permissionRequest.kind === 'read') {
 			// If user is reading a file in the working directory or workspace, auto-approve
 			// read requests. Outside workspace reads (e.g., /etc/passwd) will still require
